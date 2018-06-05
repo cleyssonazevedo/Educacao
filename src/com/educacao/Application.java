@@ -9,6 +9,8 @@ import com.educacao.models.Endereco;
 import com.educacao.models.Pessoa;
 import com.educacao.models.Sexo;
 import com.educacao.models.Telefone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -58,9 +60,9 @@ public class Application extends javax.swing.JFrame {
         cb_estado = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        tx_cep = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         tx_complemento = new javax.swing.JTextField();
+        tx_cep = new javax.swing.JFormattedTextField();
         bt_limpar = new javax.swing.JButton();
         bt_salvar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -100,9 +102,19 @@ public class Application extends javax.swing.JFrame {
 
         jLabel11.setText("Telefone");
 
+        try {
+            tx_telefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("## ####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         tx_telefone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tx_telefoneActionPerformed(evt);
+            }
+        });
+        tx_telefone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_telefoneKeyReleased(evt);
             }
         });
 
@@ -163,10 +175,20 @@ public class Application extends javax.swing.JFrame {
                 tx_logradouroActionPerformed(evt);
             }
         });
+        tx_logradouro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_logradouroKeyReleased(evt);
+            }
+        });
 
         tx_numero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tx_numeroActionPerformed(evt);
+            }
+        });
+        tx_numero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_numeroKeyReleased(evt);
             }
         });
 
@@ -177,6 +199,11 @@ public class Application extends javax.swing.JFrame {
                 tx_bairroActionPerformed(evt);
             }
         });
+        tx_bairro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_bairroKeyReleased(evt);
+            }
+        });
 
         jLabel7.setText("Bairro");
 
@@ -185,10 +212,20 @@ public class Application extends javax.swing.JFrame {
                 tx_cidadeActionPerformed(evt);
             }
         });
+        tx_cidade.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_cidadeKeyReleased(evt);
+            }
+        });
 
         jLabel8.setText("Cidade");
 
         cb_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "São Paulo", "Rio de Janeiro" }));
+        cb_estado.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_estadoItemStateChanged(evt);
+            }
+        });
         cb_estado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cb_estadoActionPerformed(evt);
@@ -199,17 +236,32 @@ public class Application extends javax.swing.JFrame {
 
         jLabel10.setText("Complemento");
 
-        tx_cep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tx_cepActionPerformed(evt);
-            }
-        });
-
         jLabel12.setText("CEP");
 
         tx_complemento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tx_complementoActionPerformed(evt);
+            }
+        });
+        tx_complemento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_complementoKeyReleased(evt);
+            }
+        });
+
+        try {
+            tx_cep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        tx_cep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_cepActionPerformed(evt);
+            }
+        });
+        tx_cep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_cepKeyReleased(evt);
             }
         });
 
@@ -234,10 +286,10 @@ public class Application extends javax.swing.JFrame {
                             .addComponent(tx_logradouro))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tx_numero)
                             .addGroup(jp_enderecoLayout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(tx_numero)
                             .addComponent(tx_cep)))
                     .addGroup(jp_enderecoLayout.createSequentialGroup()
                         .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,23 +394,6 @@ public class Application extends javax.swing.JFrame {
 
     private void cb_estadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_estadoActionPerformed
         // TODO add your handling code here:
-        Endereco end = this.pessoa.getEndereco();
-
-        switch (cb_estado.getSelectedIndex()) {
-            case 0:
-                end.setEstado("SP");
-                break;
-
-            case 1:
-                end.setEstado("RJ");
-                break;
-
-            default:
-                System.err.println("Estado incorreto!");
-        }
-
-        this.pessoa.setEndereco(end);
-
     }//GEN-LAST:event_cb_estadoActionPerformed
 
     private void cb_sexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_sexoActionPerformed
@@ -395,13 +430,6 @@ public class Application extends javax.swing.JFrame {
         end.setBairro(tx_bairro.getText());
         this.pessoa.setEndereco(end);
     }//GEN-LAST:event_tx_bairroActionPerformed
-
-    private void tx_cepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_cepActionPerformed
-        // TODO add your handling code here:
-        Endereco end = this.pessoa.getEndereco();
-        end.setCep(tx_cep.getText());
-        this.pessoa.setEndereco(end);
-    }//GEN-LAST:event_tx_cepActionPerformed
 
     private void tx_cidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_cidadeActionPerformed
         // TODO add your handling code here:
@@ -457,9 +485,86 @@ public class Application extends javax.swing.JFrame {
     }//GEN-LAST:event_tx_idadeKeyReleased
 
     private void cb_sexoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_sexoItemStateChanged
-        // TODO add your handling code here:
-        System.out.println("com.educacao.Application.cb_sexoItemStateChanged()");
+        try {
+            // TODO add your handling code here:
+            this.pessoa.setSexo(Sexo.getFromIndex(cb_sexo.getSelectedIndex()));
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
     }//GEN-LAST:event_cb_sexoItemStateChanged
+
+    private void tx_cepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_cepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tx_cepActionPerformed
+
+    private void tx_logradouroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_logradouroKeyReleased
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setLogradouro(tx_logradouro.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_logradouroKeyReleased
+
+    private void tx_telefoneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_telefoneKeyReleased
+        // TODO add your handling code here:
+        Telefone tel = this.pessoa.getTelefone();
+        tel.setNumero(this.tx_telefone.getText());
+        this.pessoa.setTelefone(tel);
+    }//GEN-LAST:event_tx_telefoneKeyReleased
+
+    private void tx_numeroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_numeroKeyReleased
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setNumero(tx_numero.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_numeroKeyReleased
+
+    private void tx_bairroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_bairroKeyReleased
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setBairro(tx_bairro.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_bairroKeyReleased
+
+    private void tx_cepKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_cepKeyReleased
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setCep(tx_cep.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_cepKeyReleased
+
+    private void tx_cidadeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_cidadeKeyReleased
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setCidade(tx_cidade.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_cidadeKeyReleased
+
+    private void cb_estadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_estadoItemStateChanged
+        // TODO add your handling code here:
+         Endereco end = this.pessoa.getEndereco();
+
+        switch (cb_estado.getSelectedIndex()) {
+            case 0:
+                end.setEstado("SP");
+                break;
+
+            case 1:
+                end.setEstado("RJ");
+                break;
+
+            default:
+                System.err.println("Estado incorreto!");
+        }
+
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_cb_estadoItemStateChanged
+
+    private void tx_complementoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_complementoKeyReleased
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setComplemento(tx_complemento.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_complementoKeyReleased
 
     /**
      * Limpa todo o formulário
@@ -537,7 +642,7 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JPanel jp_dados_cadastrais;
     private javax.swing.JPanel jp_endereco;
     private javax.swing.JTextField tx_bairro;
-    private javax.swing.JTextField tx_cep;
+    private javax.swing.JFormattedTextField tx_cep;
     private javax.swing.JTextField tx_cidade;
     private javax.swing.JTextField tx_complemento;
     private javax.swing.JTextField tx_idade;

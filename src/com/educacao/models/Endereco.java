@@ -22,7 +22,7 @@ public class Endereco {
     private String cep;
 
     public Endereco() {
-
+        this.estado = "SP";
     }
 
     public Endereco(Long id, Long id_pessoa, String logradouro, String numero, String bairro, String cidade, String estado, String complemento, String cep) {
