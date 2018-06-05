@@ -6,7 +6,7 @@ CREATE TABLE pessoa (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
     idade TINYINT NOT NULL,
-    sexo ENUM('M', 'F')
+    sexo ENUM('M', 'F', 'ND')
 );
 
 CREATE TABLE endereco (
@@ -22,7 +22,7 @@ CREATE TABLE endereco (
 
 CREATE TABLE telefone (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_pessoa INT NOT NULL UNIQUE, 
+    id_pessoa INT NOT NULL UNIQUE,
     numero VARCHAR(25) NOT NULL
 );
 

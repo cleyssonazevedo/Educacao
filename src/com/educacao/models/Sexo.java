@@ -10,7 +10,9 @@ package com.educacao.models;
  * @author cleys
  */
 public enum Sexo {
-    MASCULINO("Masculino", "M"), FEMININO("Feminino", "F");
+    MASCULINO("Masculino", "M"),
+    FEMININO("Feminino", "F"),
+    NAO_DEFINIDO("Não Definido", "ND");
 
     private final String literal;
     private final String abbr;
