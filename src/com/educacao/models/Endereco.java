@@ -34,6 +34,7 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.complemento = complemento;
+        this.cep = cep;
     }
 
     public Long getId() {

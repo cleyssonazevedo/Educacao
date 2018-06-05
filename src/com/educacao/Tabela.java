@@ -8,9 +8,11 @@ package com.educacao;
 import com.educacao.dao.GenericDAO;
 import com.educacao.dao.IGenericDAO;
 import com.educacao.models.Pessoa;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Tabela extends javax.swing.JFrame {
     private static Tabela singleton;
-    private IGenericDAO service;
+    private final IGenericDAO service;
     private DefaultTableModel currentData;
     /**
      * Creates new form Tabela
@@ -32,7 +34,7 @@ public class Tabela extends javax.swing.JFrame {
         try {
             this.atualizarDados();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
     
@@ -44,6 +46,16 @@ public class Tabela extends javax.swing.JFrame {
         tb_dados.setModel(model);
     }
     
+    private void pesquisar() {
+        try {
+            // TODO add your handling code here:
+            List<Pessoa> pessoas = this.service.buscarPorNome(tx_pesquisar.getText());
+            this.atualizarDados(this.fromTable(pessoas));
+        } catch (Exception ex) {
+            Logger.getLogger(Tabela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public DefaultTableModel getPessoas() throws Exception {
         List<Pessoa> pessoas = this.service.listar();
         this.currentData = this.fromTable(pessoas);
@@ -53,9 +65,9 @@ public class Tabela extends javax.swing.JFrame {
     private DefaultTableModel fromTable(List<Pessoa> pessoas) {
         DefaultTableModel model = new DefaultTableModel(new String[]{"Código", "Nome", "Idade", "Sexo"}, 0);
         if (pessoas != null) {
-            for (Pessoa p : pessoas) {
+            pessoas.forEach((p) -> {
                 model.addRow(new Object[]{p.getId(), p.getNome(), p.getIdade(), p.getSexo().getLiteral()});
-            }
+            });
         }
 
         this.currentData = model;
@@ -75,12 +87,13 @@ public class Tabela extends javax.swing.JFrame {
         tb_dados = new javax.swing.JTable();
         tx_pesquisar = new javax.swing.JTextField();
         bt_pesquisar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        tb_voltar = new javax.swing.JButton();
+        btn_editar = new javax.swing.JButton();
+        btn_excluir = new javax.swing.JButton();
+        btn_voltar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Lista de candidatos");
+        setTitle("Lista de Candidatos");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -116,6 +129,12 @@ public class Tabela extends javax.swing.JFrame {
         tb_dados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tb_dados);
 
+        tx_pesquisar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tx_pesquisarKeyPressed(evt);
+            }
+        });
+
         bt_pesquisar.setText("Pesquisar");
         bt_pesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,21 +142,28 @@ public class Tabela extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Editar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_editar.setText("Editar");
+        btn_editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_editarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Excluir");
-
-        tb_voltar.setText("Voltar");
-        tb_voltar.addActionListener(new java.awt.event.ActionListener() {
+        btn_excluir.setText("Excluir");
+        btn_excluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tb_voltarActionPerformed(evt);
+                btn_excluirActionPerformed(evt);
             }
         });
+
+        btn_voltar.setText("Voltar");
+        btn_voltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_voltarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Pesquisa (Somente por nomes)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,23 +173,30 @@ public class Tabela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btn_voltar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_editar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_excluir))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
-                        .addComponent(tx_pesquisar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bt_pesquisar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(tb_voltar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(tx_pesquisar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_pesquisar)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bt_pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tx_pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -171,9 +204,9 @@ public class Tabela extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tb_voltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btn_editar, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                    .addComponent(btn_excluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_voltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -181,31 +214,68 @@ public class Tabela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
-        try {
-            // TODO add your handling code here:
-            List<Pessoa> pessoas = this.service.buscarPorNome(tx_pesquisar.getText());
-            this.atualizarDados(this.fromTable(pessoas));
-        } catch (Exception ex) {
-            Logger.getLogger(Tabela.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        this.pesquisar();
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
         // TODO add your handling code here:
-        int selectedId = tb_dados.getSelectedRow();
-        System.out.println(this.currentData.getValueAt(selectedId, 0));
-    }//GEN-LAST:event_jButton1ActionPerformed
+        int row = tb_dados.getSelectedRow();
+        if (row > -1) {
+            Long id = (Long) this.currentData.getValueAt(row, 0);
+        
+            try {
+                Pessoa pessoa = this.service.buscar(id);
+                Application.fromPessoa(pessoa);
+
+                this.closing();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Falha ao buscar dados", "Falha", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            System.out.println("Não selecionado!");
+        }
+    }//GEN-LAST:event_btn_editarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         System.out.println("Fechando...");
     }//GEN-LAST:event_formWindowClosing
 
-    private void tb_voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tb_voltarActionPerformed
+    private void btn_voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_voltarActionPerformed
         // TODO add your handling code here:
+        this.closing();
+    }//GEN-LAST:event_btn_voltarActionPerformed
+
+    private void tx_pesquisarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_pesquisarKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            this.pesquisar();
+        }
+    }//GEN-LAST:event_tx_pesquisarKeyPressed
+
+    private void btn_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_excluirActionPerformed
+        // TODO add your handling code here:
+        int row = tb_dados.getSelectedRow();
+        if (row > -1) {
+            Long id = (Long) this.currentData.getValueAt(row, 0);
+            
+            try {
+                int response = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este cadastro?", "Excluir cadastro",
+                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+               if(response == 0) {
+                  this.service.excluir(id);
+                  this.atualizarDados();
+               }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Falha ao tentar excluir!", "Falha", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            System.out.println("Não Selecionado!");
+        }
+    }//GEN-LAST:event_btn_excluirActionPerformed
+
+    private void closing() {
         Application.app.setVisible(true);
-        
         
         Runnable run = new Runnable() {
             @Override
@@ -222,8 +292,8 @@ public class Tabela extends javax.swing.JFrame {
         };
         
         new Thread(run).start();
-    }//GEN-LAST:event_tb_voltarActionPerformed
-
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -238,11 +308,12 @@ public class Tabela extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_pesquisar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btn_editar;
+    private javax.swing.JButton btn_excluir;
+    private javax.swing.JButton btn_voltar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tb_dados;
-    private javax.swing.JButton tb_voltar;
     private javax.swing.JTextField tx_pesquisar;
     // End of variables declaration//GEN-END:variables
 }

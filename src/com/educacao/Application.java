@@ -11,8 +11,6 @@ import com.educacao.models.Endereco;
 import com.educacao.models.Pessoa;
 import com.educacao.models.Sexo;
 import com.educacao.models.Telefone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class Application extends javax.swing.JFrame {
     public static Application app;
-    private IGenericDAO service;
+    private final IGenericDAO service;
     private Pessoa pessoa;
 
     /**
@@ -34,7 +32,49 @@ public class Application extends javax.swing.JFrame {
     }
     
     public static void fromPessoa(Pessoa pessoa) {
+        Application.app.limparDados();
+        app.pessoa = pessoa;
         
+        app.tx_nome.setText(pessoa.getNome());
+        app.tx_idade.setText(String.valueOf(pessoa.getIdade()));
+        
+        int sexo;
+        switch (pessoa.getSexo()) {
+            case MASCULINO:
+                sexo = 1;
+                break;
+            case FEMININO:
+                sexo = 2;
+                break;
+                
+            default:
+                sexo = 0;
+                break;
+        }
+        
+        app.cb_sexo.setSelectedIndex(sexo);
+        app.tx_telefone.setText(pessoa.getTelefone().getNumero());
+        
+        app.tx_logradouro.setText(pessoa.getEndereco().getLogradouro());
+        app.tx_numero.setText(pessoa.getEndereco().getNumero());
+        app.tx_bairro.setText(pessoa.getEndereco().getBairro());
+        
+        app.tx_cep.setText(pessoa.getEndereco().getCep());
+        app.tx_cidade.setText(pessoa.getEndereco().getCidade());
+        app.tx_complemento.setText(pessoa.getEndereco().getComplemento());
+        
+        int estado;
+        switch(pessoa.getEndereco().getEstado()) {
+            case "RJ":
+               estado = 1;
+               break;
+               
+            default:
+                estado = 0;
+                break;
+        }
+        
+        app.cb_estado.setSelectedIndex(estado);
     }
 
     /**
@@ -78,6 +118,7 @@ public class Application extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Educação");
+        setResizable(false);
 
         jLabel2.setText("Nome");
 
@@ -473,12 +514,18 @@ public class Application extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println(this.pessoa);
         try {
-            this.service.salvar(this.pessoa);
-            JOptionPane.showMessageDialog(null, "Dados salvos!");
+            if (this.pessoa.getId() == null) {
+                this.service.salvar(this.pessoa);
+            } else {
+                System.out.println("Editar");
+                this.service.editar(this.pessoa);
+            }
+            
+            JOptionPane.showMessageDialog(null, "Dados salvos!", "Cadastro", JOptionPane.PLAIN_MESSAGE);
             this.limparDados();
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Falha ao Salvar dados!");
+            JOptionPane.showMessageDialog(null, "Falha ao Salvar dados!", "Falha", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bt_salvarActionPerformed
 
@@ -497,7 +544,7 @@ public class Application extends javax.swing.JFrame {
 
                 String tx = this.tx_idade.getText();
                 this.tx_idade.setText(tx.substring(0, tx.length() - 1));
-                JOptionPane.showMessageDialog(null, "Digite somente números");
+                JOptionPane.showMessageDialog(null, "Digite somente números", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             String tx = this.tx_idade.getText();
@@ -603,6 +650,8 @@ public class Application extends javax.swing.JFrame {
      * Limpa todo o formulário
      */
     private void limparDados() {
+        jb_tabela.setSelectedIndex(0);
+        
         tx_bairro.setText(null);
         tx_cep.setText(null);
         tx_cidade.setText(null);

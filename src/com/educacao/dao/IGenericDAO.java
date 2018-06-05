@@ -17,6 +17,7 @@ public interface IGenericDAO {
     void editar(Pessoa pessoa) throws Exception;
     void excluir(Long id) throws Exception;
     
+    Pessoa buscar(Long id) throws Exception;
     List<Pessoa> buscarPorNome(String nome) throws Exception;
     List<Pessoa> listar() throws Exception;
 }
