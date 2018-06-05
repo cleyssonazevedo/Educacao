@@ -5,6 +5,8 @@
  */
 package com.educacao;
 
+import com.educacao.dao.GenericDAO;
+import com.educacao.dao.IGenericDAO;
 import com.educacao.models.Endereco;
 import com.educacao.models.Pessoa;
 import com.educacao.models.Sexo;
@@ -18,7 +20,8 @@ import javax.swing.JOptionPane;
  * @author cleys
  */
 public class Application extends javax.swing.JFrame {
-
+    public static Application app;
+    private IGenericDAO service;
     private Pessoa pessoa;
 
     /**
@@ -27,6 +30,11 @@ public class Application extends javax.swing.JFrame {
     public Application() {
         initComponents();
         this.pessoa = new Pessoa();
+        this.service = new GenericDAO();
+    }
+    
+    public static void fromPessoa(Pessoa pessoa) {
+        
     }
 
     /**
@@ -66,6 +74,7 @@ public class Application extends javax.swing.JFrame {
         bt_limpar = new javax.swing.JButton();
         bt_salvar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        bt_visualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Educação");
@@ -356,6 +365,13 @@ public class Application extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Educação 7.2.5 - Cadastro para recrutamento");
 
+        bt_visualizar.setText("Visualizar");
+        bt_visualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_visualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -364,7 +380,8 @@ public class Application extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(bt_visualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bt_salvar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bt_limpar))
@@ -383,9 +400,11 @@ public class Application extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jb_tabela)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bt_limpar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(bt_limpar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bt_visualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -453,6 +472,14 @@ public class Application extends javax.swing.JFrame {
     private void bt_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salvarActionPerformed
         // TODO add your handling code here:
         System.out.println(this.pessoa);
+        try {
+            this.service.salvar(this.pessoa);
+            JOptionPane.showMessageDialog(null, "Dados salvos!");
+            this.limparDados();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Falha ao Salvar dados!");
+        }
     }//GEN-LAST:event_bt_salvarActionPerformed
 
     private void tx_nomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_nomeKeyReleased
@@ -566,6 +593,12 @@ public class Application extends javax.swing.JFrame {
         this.pessoa.setEndereco(end);
     }//GEN-LAST:event_tx_complementoKeyReleased
 
+    private void bt_visualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_visualizarActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Tabela.run();
+    }//GEN-LAST:event_bt_visualizarActionPerformed
+
     /**
      * Limpa todo o formulário
      */
@@ -616,7 +649,8 @@ public class Application extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Application().setVisible(true);
+                Application.app = new Application();
+                app.setVisible(true);
             }
         });
     }
@@ -624,6 +658,7 @@ public class Application extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_limpar;
     private javax.swing.JButton bt_salvar;
+    private javax.swing.JButton bt_visualizar;
     private javax.swing.JComboBox<String> cb_estado;
     private javax.swing.JComboBox<String> cb_sexo;
     private javax.swing.JLabel jLabel1;

@@ -138,21 +138,25 @@ public class Pessoa {
         builder.append(String.format("Idade: %d\n", idade));
         builder.append(String.format("Sexo: %s\n", sexo.getLiteral()));
 
-        builder.append("Endereço\n");
-        builder.append(String.format("Id: %d\n", endereco.getId()));
-        builder.append(String.format("Id Pessoa: %d\n", endereco.getId_pessoa()));
-        builder.append(String.format("Logradouro: %s\n", endereco.getLogradouro()));
-        builder.append(String.format("Número: %s\n", endereco.getNumero()));
-        builder.append(String.format("Bairro: %s\n", endereco.getBairro()));
-        builder.append(String.format("Cidade: %s\n", endereco.getCidade()));
-        builder.append(String.format("CEP: %s\n", endereco.getCep()));
-        builder.append(String.format("estado: %s\n", endereco.getEstado()));
-        builder.append(String.format("Complemento: %s\n", endereco.getComplemento()));
+        if(this.endereco != null) {
+            builder.append("Endereço\n");
+            builder.append(String.format("Id: %d\n", endereco.getId()));
+            builder.append(String.format("Id Pessoa: %d\n", endereco.getId_pessoa()));
+            builder.append(String.format("Logradouro: %s\n", endereco.getLogradouro()));
+            builder.append(String.format("Número: %s\n", endereco.getNumero()));
+            builder.append(String.format("Bairro: %s\n", endereco.getBairro()));
+            builder.append(String.format("Cidade: %s\n", endereco.getCidade()));
+            builder.append(String.format("CEP: %s\n", endereco.getCep()));
+            builder.append(String.format("estado: %s\n", endereco.getEstado()));
+            builder.append(String.format("Complemento: %s\n", endereco.getComplemento()));
+        }
 
-        builder.append("Número de telefone\n");
-        builder.append(String.format("Id: %d\n", telefone.getId()));
-        builder.append(String.format("Id Pessoa: %d\n", telefone.getId_pessoa()));
-        builder.append(String.format("Telefone: %s\n", telefone.getNumero()));
+        if (this.telefone != null) {
+            builder.append("Número de telefone\n");
+            builder.append(String.format("Id: %d\n", telefone.getId()));
+            builder.append(String.format("Id Pessoa: %d\n", telefone.getId_pessoa()));
+            builder.append(String.format("Telefone: %s\n", telefone.getNumero()));
+        }
 
         return builder.toString();
     }

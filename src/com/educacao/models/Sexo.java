@@ -41,4 +41,17 @@ public enum Sexo {
                 throw  new Exception("Sexo incorreto!");
         }
     }
+    
+    public static Sexo getFromAbbr(String abbr) throws Exception {
+        switch(abbr) {
+            case "M":
+                return Sexo.MASCULINO;
+            
+            case "F":
+                return Sexo.FEMININO;
+                
+            default:
+                return Sexo.NAO_DEFINIDO;
+        }
+    }
 }

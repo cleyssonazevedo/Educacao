@@ -28,7 +28,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="bt_visualizar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="bt_salvar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="bt_limpar" min="-2" max="-2" attributes="0"/>
@@ -52,9 +53,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jb_tabela" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bt_limpar" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                  <Component id="bt_salvar" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="bt_limpar" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="bt_salvar" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="bt_visualizar" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -412,6 +416,14 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Educa&#xe7;&#xe3;o 7.2.5 - Cadastro para recrutamento"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_visualizar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Visualizar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_visualizarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
