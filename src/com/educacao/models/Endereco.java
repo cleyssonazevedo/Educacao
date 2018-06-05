@@ -19,12 +19,13 @@ public class Endereco {
     private String cidade;
     private String estado;
     private String complemento;
+    private String cep;
 
     public Endereco() {
 
     }
 
-    public Endereco(Long id, Long id_pessoa, String logradouro, String numero, String bairro, String cidade, String estado, String complemento) {
+    public Endereco(Long id, Long id_pessoa, String logradouro, String numero, String bairro, String cidade, String estado, String complemento, String cep) {
         this.id = id;
         this.id_pessoa = id_pessoa;
         this.logradouro = logradouro;
@@ -98,8 +99,17 @@ public class Endereco {
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
-    
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
     public static class Builder {
+
         private Long id;
         private Long id_pessoa;
         private String logradouro;
@@ -108,6 +118,7 @@ public class Endereco {
         private String cidade;
         private String estado;
         private String complemento;
+        private String cep;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -149,8 +160,13 @@ public class Endereco {
             return this;
         }
         
+        public Builder setCep(String cep) {
+            this.cep = cep;
+            return this;
+        }
+
         public Endereco build() {
-            return new Endereco(id, id_pessoa, logradouro, numero, bairro, cidade, estado, complemento);
+            return new Endereco(id, id_pessoa, logradouro, numero, bairro, cidade, estado, complemento, cep);
         }
     }
 }

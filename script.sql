@@ -17,6 +17,7 @@ CREATE TABLE endereco (
     bairro VARCHAR(255) NOT NULL,
     cidade VARCHAR(255) NOT NULL,
     estado CHAR(2) NOT NULL,
+    cep CHAR(8) NOT NULL,
     complemento VARCHAR(255)
 );
 

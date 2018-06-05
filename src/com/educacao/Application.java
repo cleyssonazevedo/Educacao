@@ -5,17 +5,26 @@
  */
 package com.educacao;
 
+import com.educacao.models.Endereco;
+import com.educacao.models.Pessoa;
+import com.educacao.models.Sexo;
+import com.educacao.models.Telefone;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author cleys
  */
 public class Application extends javax.swing.JFrame {
 
+    private Pessoa pessoa;
+
     /**
      * Creates new form Application
      */
     public Application() {
         initComponents();
+        this.pessoa = new Pessoa();
     }
 
     /**
@@ -36,7 +45,7 @@ public class Application extends javax.swing.JFrame {
         cb_sexo = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        tx_telefone = new javax.swing.JFormattedTextField();
         jp_endereco = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         tx_logradouro = new javax.swing.JTextField();
@@ -46,13 +55,12 @@ public class Application extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         tx_cidade = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cb_estado = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tx_complemento = new javax.swing.JTextArea();
         tx_cep = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        tx_complemento = new javax.swing.JTextField();
         bt_limpar = new javax.swing.JButton();
         bt_salvar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -62,9 +70,26 @@ public class Application extends javax.swing.JFrame {
 
         jLabel2.setText("Nome");
 
+        tx_nome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_nomeKeyReleased(evt);
+            }
+        });
+
+        tx_idade.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_idadeKeyReleased(evt);
+            }
+        });
+
         jLabel3.setText("Idade");
 
         cb_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Não Definido", "Masculino", "Feminino" }));
+        cb_sexo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_sexoItemStateChanged(evt);
+            }
+        });
         cb_sexo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cb_sexoActionPerformed(evt);
@@ -74,6 +99,12 @@ public class Application extends javax.swing.JFrame {
         jLabel4.setText("Sexo");
 
         jLabel11.setText("Telefone");
+
+        tx_telefone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_telefoneActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jp_dados_cadastraisLayout = new javax.swing.GroupLayout(jp_dados_cadastrais);
         jp_dados_cadastrais.setLayout(jp_dados_cadastraisLayout);
@@ -98,7 +129,7 @@ public class Application extends javax.swing.JFrame {
                     .addGroup(jp_dados_cadastraisLayout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jFormattedTextField1))
+                    .addComponent(tx_telefone))
                 .addContainerGap())
         );
         jp_dados_cadastraisLayout.setVerticalGroup(
@@ -119,24 +150,48 @@ public class Application extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addComponent(tx_telefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         jb_tabela.addTab("Dados Pessoais", jp_dados_cadastrais);
 
         jLabel5.setText("Logradouro");
 
+        tx_logradouro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_logradouroActionPerformed(evt);
+            }
+        });
+
+        tx_numero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_numeroActionPerformed(evt);
+            }
+        });
+
         jLabel6.setText("Número");
+
+        tx_bairro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_bairroActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Bairro");
 
+        tx_cidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_cidadeActionPerformed(evt);
+            }
+        });
+
         jLabel8.setText("Cidade");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "São Paulo", "Rio de Janeiro" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cb_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "São Paulo", "Rio de Janeiro" }));
+        cb_estado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cb_estadoActionPerformed(evt);
             }
         });
 
@@ -144,11 +199,19 @@ public class Application extends javax.swing.JFrame {
 
         jLabel10.setText("Complemento");
 
-        tx_complemento.setColumns(20);
-        tx_complemento.setRows(5);
-        jScrollPane1.setViewportView(tx_complemento);
+        tx_cep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_cepActionPerformed(evt);
+            }
+        });
 
         jLabel12.setText("CEP");
+
+        tx_complemento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tx_complementoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jp_enderecoLayout = new javax.swing.GroupLayout(jp_endereco);
         jp_endereco.setLayout(jp_enderecoLayout);
@@ -157,23 +220,13 @@ public class Application extends javax.swing.JFrame {
             .addGroup(jp_enderecoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jp_enderecoLayout.createSequentialGroup()
-                        .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jp_enderecoLayout.createSequentialGroup()
-                                .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8))
-                                .addGap(311, 311, 311)
-                                .addComponent(jLabel12))
-                            .addComponent(jLabel10))
-                        .addGap(0, 158, Short.MAX_VALUE))
+                    .addComponent(tx_complemento)
                     .addGroup(jp_enderecoLayout.createSequentialGroup()
                         .addComponent(tx_cidade)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jp_enderecoLayout.createSequentialGroup()
                         .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(tx_bairro, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
@@ -185,7 +238,17 @@ public class Application extends javax.swing.JFrame {
                                 .addComponent(jLabel6)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(tx_numero)
-                            .addComponent(tx_cep))))
+                            .addComponent(tx_cep)))
+                    .addGroup(jp_enderecoLayout.createSequentialGroup()
+                        .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jp_enderecoLayout.createSequentialGroup()
+                                .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addGap(311, 311, 311)
+                                .addComponent(jLabel12))
+                            .addComponent(jLabel10))
+                        .addGap(0, 158, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jp_enderecoLayout.setVerticalGroup(
@@ -214,19 +277,29 @@ public class Application extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jp_enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tx_cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addComponent(tx_complemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         jb_tabela.addTab("Endereço", jp_endereco);
 
         bt_limpar.setText("Limpar");
+        bt_limpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_limparActionPerformed(evt);
+            }
+        });
 
         bt_salvar.setText("Salvar");
+        bt_salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_salvarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Educação 7.2.5 - Cadastro para recrutamento");
@@ -267,13 +340,146 @@ public class Application extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cb_estadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_estadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+        Endereco end = this.pessoa.getEndereco();
+
+        switch (cb_estado.getSelectedIndex()) {
+            case 0:
+                end.setEstado("SP");
+                break;
+
+            case 1:
+                end.setEstado("RJ");
+                break;
+
+            default:
+                System.err.println("Estado incorreto!");
+        }
+
+        this.pessoa.setEndereco(end);
+
+    }//GEN-LAST:event_cb_estadoActionPerformed
 
     private void cb_sexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_sexoActionPerformed
         // TODO add your handling code here:
+        try {
+            this.pessoa.setSexo(Sexo.getFromIndex(cb_sexo.getSelectedIndex()));
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }//GEN-LAST:event_cb_sexoActionPerformed
+
+    private void tx_telefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_telefoneActionPerformed
+        // TODO add your handling code here:
+        this.pessoa.setTelefone(new Telefone.Builder().setNumero(tx_telefone.getText()).build());
+    }//GEN-LAST:event_tx_telefoneActionPerformed
+
+    private void tx_logradouroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_logradouroActionPerformed
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setLogradouro(tx_logradouro.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_logradouroActionPerformed
+
+    private void tx_numeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_numeroActionPerformed
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setNumero(tx_numero.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_numeroActionPerformed
+
+    private void tx_bairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_bairroActionPerformed
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setBairro(tx_bairro.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_bairroActionPerformed
+
+    private void tx_cepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_cepActionPerformed
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setCep(tx_cep.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_cepActionPerformed
+
+    private void tx_cidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_cidadeActionPerformed
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setCidade(tx_cidade.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_cidadeActionPerformed
+
+    private void tx_complementoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tx_complementoActionPerformed
+        // TODO add your handling code here:
+        Endereco end = this.pessoa.getEndereco();
+        end.setComplemento(tx_complemento.getText());
+        this.pessoa.setEndereco(end);
+    }//GEN-LAST:event_tx_complementoActionPerformed
+
+    private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
+        // TODO add your handling code here:
+        this.limparDados();
+    }//GEN-LAST:event_bt_limparActionPerformed
+
+    private void bt_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salvarActionPerformed
+        // TODO add your handling code here:
+        System.out.println(this.pessoa);
+    }//GEN-LAST:event_bt_salvarActionPerformed
+
+    private void tx_nomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_nomeKeyReleased
+        // TODO add your handling code here:
+        this.pessoa.setNome(tx_nome.getText());
+    }//GEN-LAST:event_tx_nomeKeyReleased
+
+    private void tx_idadeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_idadeKeyReleased
+        // TODO add your handling code here:
+        if (tx_idade.getText().length() <= 3) {
+            try {
+                this.pessoa.setIdade(Integer.parseInt(tx_idade.getText()));
+            } catch (NumberFormatException e) {
+                System.err.println(e);
+
+                String tx = this.tx_idade.getText();
+                this.tx_idade.setText(tx.substring(0, tx.length() - 1));
+                JOptionPane.showMessageDialog(null, "Digite somente números");
+            }
+        } else {
+            String tx = this.tx_idade.getText();
+            this.tx_idade.setText(tx.substring(0, tx.length() - 1));
+        }
+        
+        try {
+            this.pessoa.setIdade(Integer.parseInt(this.tx_idade.getText()));
+        } catch (NumberFormatException e) {
+            System.err.println(e);
+        }
+    }//GEN-LAST:event_tx_idadeKeyReleased
+
+    private void cb_sexoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_sexoItemStateChanged
+        // TODO add your handling code here:
+        System.out.println("com.educacao.Application.cb_sexoItemStateChanged()");
+    }//GEN-LAST:event_cb_sexoItemStateChanged
+
+    /**
+     * Limpa todo o formulário
+     */
+    private void limparDados() {
+        tx_bairro.setText(null);
+        tx_cep.setText(null);
+        tx_cidade.setText(null);
+        tx_complemento.setText(null);
+        tx_idade.setText(null);
+        tx_logradouro.setText(null);
+        tx_nome.setText(null);
+        tx_numero.setText(null);
+        tx_telefone.setText(null);
+
+        cb_estado.setSelectedIndex(0);
+        cb_sexo.setSelectedIndex(0);
+
+        this.pessoa = new Pessoa();
+    }
 
     /**
      * @param args the command line arguments
@@ -313,9 +519,8 @@ public class Application extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_limpar;
     private javax.swing.JButton bt_salvar;
+    private javax.swing.JComboBox<String> cb_estado;
     private javax.swing.JComboBox<String> cb_sexo;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -328,17 +533,17 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jb_tabela;
     private javax.swing.JPanel jp_dados_cadastrais;
     private javax.swing.JPanel jp_endereco;
     private javax.swing.JTextField tx_bairro;
     private javax.swing.JTextField tx_cep;
     private javax.swing.JTextField tx_cidade;
-    private javax.swing.JTextArea tx_complemento;
+    private javax.swing.JTextField tx_complemento;
     private javax.swing.JTextField tx_idade;
     private javax.swing.JTextField tx_logradouro;
     private javax.swing.JTextField tx_nome;
     private javax.swing.JTextField tx_numero;
+    private javax.swing.JFormattedTextField tx_telefone;
     // End of variables declaration//GEN-END:variables
 }

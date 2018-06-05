@@ -28,4 +28,17 @@ public enum Sexo {
     public String getAbreviacao() {
         return this.abbr;
     }
+    
+    public static Sexo getFromIndex(int index) throws Exception {
+        switch(index) {
+            case 0:
+               return Sexo.NAO_DEFINIDO;
+            case 1:
+               return Sexo.MASCULINO;
+            case 2:
+               return Sexo.FEMININO;
+            default:
+                throw  new Exception("Sexo incorreto!");
+        }
+    }
 }
